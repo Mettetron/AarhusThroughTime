@@ -1,13 +1,16 @@
 # load packages
 library(shiny)  
+library(shinyWidgets) # for sliderTextInput
 library(magick)  # for nice image overlay in shiny
 #library(rvest)  # website scrape
 #library(rgdal)  # dealing with shapefiles
 #library(leaflet)  # fancy interactive map
 
 
-
+# i got help from here:
 # https://stackoverflow.com/questions/53601495/overlaying-images-in-r-shiny
+
+
 ui <- fluidPage(
   
   titlePanel("Photo Morp Test"),
@@ -15,10 +18,9 @@ ui <- fluidPage(
     imageOutput("myphoto")
   ),
   fluidRow(align="center",
-    sliderInput("img.opacity", "Overlay opacity",
-                ticks = FALSE,
-                min = 0, max = 7,
-                value = 0, step = 1),
+    sliderTextInput("img.opacity", "Year shown",
+                choices = c("1906", 1:6, "2021"), 
+                selected = "1906")
   )
 )
 
