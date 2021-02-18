@@ -16,7 +16,7 @@ old.photo.file <- "Trojborgvej50_1906.png"
 new.photo.file <- "Trojborgvej50_2021.png"
 old.year <- "1906"
 new.year <- "2021"
-img.or <- "landscape"  # set orientation, "landscape" og "portrait"
+img.or <- "landscape"  # set orientation, "landscape" or "portrait"
   
 # set up user interface
 ui <- fluidPage(
@@ -30,6 +30,10 @@ ui <- fluidPage(
     sliderTextInput("img.opacity", "Year shown",
                 choices = c(old.year, seq(0.05, 0.95, 0.05), new.year), 
                 selected = old.year)
+  ),
+  fluidRow(align="center",
+           "For more postcards from the past visit:",
+           tags$a(href="www.bjorneri.dk", "www.bjorneri.dk")
   )
 )
 
