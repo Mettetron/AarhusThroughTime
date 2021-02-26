@@ -46,7 +46,7 @@ ui <- bootstrapPage(
          
                       fluidRow(
                         column(6,
-                               HTML('<div style="text-align:center;"><p><a href="https://www.postcrossing.com/postal-monitor">
+                               HTML('<div style="text-align:center;"><p><a href="https://github.com/Mettetron/AarhusThroughTime">
                   <img src="GitHubLogo.png" width="36" height="36"/></a></p>
                                     <h6>GitHub repository</h6> </div>')),
                       column(6,
