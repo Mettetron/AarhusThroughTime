@@ -73,6 +73,8 @@ server <- function(input,output){
 
   # save as txt from ecxel -> open with sublime text -> save with encoding UTF-8
   places <- read_tsv("ATT_data.txt")
+  # remove currently unwanted locations
+  places <- places[places$use == "yes", ]
   
   # make map icons with color depending on the existence of new photo
   icons <- awesomeIcons(
