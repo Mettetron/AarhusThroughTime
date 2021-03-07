@@ -38,37 +38,28 @@ ui <- bootstrapPage(
         ),
         
         # github and postcard links in lower right
-        absolutePanel(id = "linkz",
-                      bottom = 20, right = 10, width = 150, fixed=TRUE,
-                      draggable = FALSE, height = "auto",
-                      
-         
-                      fluidRow(
-                        column(6,
-                               HTML('<div style="text-align:center;"><p><a href="https://github.com/Mettetron/AarhusThroughTime">
-                  <img src="GitHubLogo.png" width="36" height="36"/></a></p>
-                                    <h6>GitHub repository</h6> </div>')),
-                      column(6,
-                             HTML('<div style="text-align:center;"><p><a href="https://www.bjorneri.dk">
-                  <img src="postcardLogo.png" height="36" /></a></p>
-                                  <h6>Source of postcards</h6> </div>')
-                             ))
-                      
-          
-        ),
+        absolutePanel(id = "links",
+                      bottom = 20, right = 10, width = 100, fixed=TRUE,
+                      draggable = FALSE, height = 46,
+                      HTML('<div style="float: left;"><p><a href="https://github.com/Mettetron/AarhusThroughTime">
+                  <img src="GitHubLogo.png" width="30" height="30" title="GitHub repository"/></a></p></div>'),
+                      HTML('<div style="position: relative; margin-left:40px;"><p><a href="https://www.bjorneri.dk">
+                  <img src="postcardLogo.png" height="30" title="Source of postcards"/></a></p></div>')
+                      ),
+           
+                        
         
         # info button in upper left - button click brings out info panel
         absolutePanel(top = 12, left = 50, width = 50, fixed=TRUE,
                       draggable = FALSE, height = 50,
                       div(
                         actionButton(
-                          #class = "btn-primary",
                           inputId = "button_showInfo", 
                           icon = icon("info-circle"),
                           label = "",
                           style='padding:5px; font-size:250%; 
                           height:60px; width:60px; 
-                          background-color: white; color: #555555; 
+                          background-color: white; color: #4CAF50; 
                           border-color: darkgrey;'
                         )
                       )
@@ -98,7 +89,7 @@ server <- function(input,output){
     markerColor = ifelse(places$newpic == "placeholder.png", "red", "blue")
   )
 
-  # make sidebar map with all the locations, which you can click to select photo
+  # make background map with all the locations, which you can click to select photo
   output$mymap <- renderLeaflet({
     leaflet() %>% 
       addTiles(group = "OSM (default)") %>%
@@ -108,16 +99,33 @@ server <- function(input,output){
       setView(10.247834136581673, 56.15996939526574, zoom=14)
   })
   
+  # Choose initial location, and set it up so that a click on a map marker changes the photos shown
+  place.clicked  <- reactiveVal("Trojborgvej50")
   
-  place.clicked <- "Trojborgvej50"  # if no clicking yet, start out with this place
-  old.photo.file <- places$oldpic[places$place.name == place.clicked]
-  new.photo.file <- places$newpic[places$place.name == place.clicked]
-  old.year <- places$year[places$place.name == place.clicked]
-  img.or <- places$orientation[places$place.name == place.clicked]  # set orientation, "landscape" or "portrait"
-  img.width <- ifelse(img.or == "landscape", "800", "650")
-  str1 <- paste(places$nice.name[places$place.name == place.clicked], places$year[places$place.name == place.clicked], "- 2021")
-  str2 <- places$place.text[places$place.name == place.clicked]
+  observeEvent(input$mymap_marker_click, {
+    newPlace <- input$mymap_marker_click$id     
+    place.clicked(newPlace)             
+  })
+  
+  # make photos (overlayed)
+  output$myphoto <- renderUI({
+    old.photo.file <- places$oldpic[places$place.name == place.clicked()]
+    new.photo.file <- places$newpic[places$place.name == place.clicked()]
+    old.year <- places$year[places$place.name == place.clicked()]
+    img.or <- places$orientation[places$place.name == place.clicked()]  # set orientation, "landscape" or "portrait"
+    img.width <- ifelse(img.or == "landscape", "800", "650")
+    withTags({
+      div(id="photo",
+          img(class="bottom", src=old.photo.file, width=img.width),
+          img(class="top", src=new.photo.file, width=img.width)
+      )
+    })
+  })
+  
+  # make text below photo
   output$blabla <- renderUI({
+    str1 <- paste(places$nice.name[places$place.name == place.clicked()], places$year[places$place.name == place.clicked()], "- 2021")
+    str2 <- places$place.text[places$place.name == place.clicked()]
     withTags({
       div(id="infotext",
           HTML(paste(str1, str2, sep = '<br/>'))
@@ -125,46 +133,8 @@ server <- function(input,output){
     })
   })
 
-  output$myphoto <- renderUI( 
-    withTags({
-      div(id="photo",
-          img(class="bottom", src=old.photo.file, width=img.width),
-          img(class="top", src=new.photo.file, width=img.width)
-      )
-    })
-  )
   
-  ##### change everything when map is clicked
-  observeEvent(input$mymap_marker_click, { 
-    
-    place.clicked <- input$mymap_marker_click$id  
-    old.photo.file <- places$oldpic[places$place.name == place.clicked]
-    new.photo.file <- places$newpic[places$place.name == place.clicked]
-    old.year <- places$year[places$place.name == place.clicked]
-    img.or <- places$orientation[places$place.name == place.clicked]  # set orientation, "landscape" or "portrait"
-    img.width <- ifelse(img.or == "landscape", "800", "650")
-    
-    str1 <- paste(places$nice.name[places$place.name == place.clicked], places$year[places$place.name == place.clicked], "- 2021")
-    str2 <- places$place.text[places$place.name == place.clicked]
-    output$blabla <- renderUI({
-      withTags({
-        div(id="infotext",
-            HTML(paste(str1, str2, sep = '<br/>'))
-        )
-      })
-    })
-    output$myphoto <- renderUI( 
-      withTags({
-        div(id="photo",
-            img(class="bottom", src=old.photo.file, width=img.width),
-            img(class="top", src=new.photo.file, width=img.width)
-        )
-      })
-    )
-  })
-  
-  
-  # showw app info when info button clicked
+  # show app info when info button clicked
   observeEvent(input$button_showInfo, {
     output$myAppInfo <- renderUI({
       absolutePanel(id = "appInfo",
@@ -180,37 +150,23 @@ server <- function(input,output){
                         border-color: darkgrey;
                         float:left;'
                     ),
-                    h3(id = "appInfoText", "Aarhus Through Time"),
+                    h3(id = "appInfoText", 
+                       style = 'font-weight: bold;',
+                       "Aarhus Through Time"),
                     h5(id = "appInfoText",
-                       "Click a marker on the map."),
-                    h5(id = "appInfoText",
-                       "Move the slider under the image"),
-                    h5(id = "appInfoText",
-                       "Enjoy your time travel"),
-                    
+                       "Click a marker on the map - Move the slider under the image - Enjoy your time travel!"),
+                    h6(id = "appInfoText",
+                       "Red map markers indicate locations that still do not 
+                       have a present-day photo. I'm working on it. 
+                       I'm also still working on adding some text for each location. See 'Huset' and 'Kollegier'.")
                     )
-                           
-                       
-                  
-                          
-                    # h3("Aarhus Through Time", 
-                    #    style='margin-left: 70px; margin-top: 20px; 
-                    #    position: absolute;'),
-                    # h6("bla", style='margin-left: 70px; position: relative;')
-                      
-                   #h6("hej")
-                   # ),
-                   # fluidRow(h3("blablbalablab"))
-                      
-      
     })
   })
   
-  # when hide button clicked, info panel is removed (repleced with empty ui)
+  # when X button clicked, info panel is removed (repleced with empty ui)
   observeEvent(input$button_hideInfo, {
     output$myAppInfo <- renderUI({})
   })
-  
   
 }
 

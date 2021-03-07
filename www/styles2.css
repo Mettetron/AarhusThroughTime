@@ -34,10 +34,10 @@ div.outer {
   font-size: 100%;
 }
 
-#linkz {
+#links {
   /* background box for links */
   background: rgba(255, 255, 255, 0.75);
-  padding: 5px 5px 0px 5px;
+  padding: 8px 8px 8px 8px;
 }
 
 #appInfo {
@@ -60,7 +60,7 @@ div.outer {
   margin-bottom: 15px;
   margin-right: auto;
   margin-left: auto;
-  width: 80%;
+  width: 100%;
   height: 10px;
 }
 
@@ -71,7 +71,7 @@ div.outer {
   border-radius: 5px;  
   background: #d3d3d3;
   outline: none;
-  opacity: 0.7;
+  opacity: 0.8;
   -webkit-transition: .2s;
   transition: opacity .2s;
 }
@@ -81,16 +81,16 @@ div.outer {
   appearance: none;
   width: 25px;
   height: 25px;
-  border: 0;
-  background: url("sliderIcon.png");
-  cursor: hand;
+  border-radius: 50%; 
+  background: #4CAF50;
+  cursor: pointer;
 }
 
 .slider::-moz-range-thumb {
   width: 25px;
   height: 25px;
-  border: 0;
-  background: url("sliderIcon.png");
+  border-radius: 50%;
+  background: #4CAF50;
   cursor: hand;
 }
 
