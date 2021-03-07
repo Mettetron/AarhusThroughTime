@@ -1,4 +1,5 @@
 
+/* background map */
 div.outer {
   position: fixed;
   top: 0;
@@ -10,18 +11,13 @@ div.outer {
 }
 
 #photobox {
-  /* Appearance */
+  /* background box for images */
   background: rgba(255, 255, 255, 0.75);
   padding: 15px 15px 15px 15px;
   cursor: move;
 }
 
-#linkz {
-  /* Appearance */
-  background: rgba(255, 255, 255, 0.75);
-  padding: 5px 5px 0px 5px;
-}
-
+/* photos, old on bottom, new on top */
 #photo img.bottom {
   position:absolute;
 }
@@ -31,9 +27,37 @@ div.outer {
   opacity: 0;
 }
 
+#infotext {
+  /* styling of place info text */
+  color: black;
+  font-family: helvetica;
+  font-size: 100%;
+}
+
+#linkz {
+  /* background box for links */
+  background: rgba(255, 255, 255, 0.75);
+  padding: 5px 5px 0px 5px;
+}
+
+#appInfo {
+  /* background box for links */
+  background: rgba(255, 255, 255, 1);
+  padding: 2px 2px 2px 2px;
+}
+
+#appInfoText {
+  margin-left: 70px;
+  margin-top: 15px;
+  font-family: helvetica;
+  color: black;
+}
+
+/* slider */
 #contrastSlider {
   position: relative;
   margin-top: 15px;
+  margin-bottom: 15px;
   margin-right: auto;
   margin-left: auto;
   width: 80%;
@@ -57,17 +81,17 @@ div.outer {
   appearance: none;
   width: 25px;
   height: 25px;
-  border-radius: 50%; 
-  background: #4CAF50;
-  cursor: pointer;
+  border: 0;
+  background: url("sliderIcon.png");
+  cursor: hand;
 }
 
 .slider::-moz-range-thumb {
   width: 25px;
   height: 25px;
-  border-radius: 50%;
-  background: #4CAF50;
-  cursor: pointer;
+  border: 0;
+  background: url("sliderIcon.png");
+  cursor: hand;
 }
 
 

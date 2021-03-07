@@ -33,8 +33,7 @@ ui <- bootstrapPage(
                       }),
                       
                       # text
-                      span(tags$i(h6(textOutput("blabla"))), style="color:#045a8d; position:relative; left:10px; top:10px; width:80%;")
-                      
+                      htmlOutput("blabla")
                       
         ),
         
@@ -56,11 +55,26 @@ ui <- bootstrapPage(
                              ))
                       
           
-        )
+        ),
         
-        
+        # info button in upper left - button click brings out info panel
+        absolutePanel(top = 12, left = 50, width = 50, fixed=TRUE,
+                      draggable = FALSE, height = 50,
+                      div(
+                        actionButton(
+                          #class = "btn-primary",
+                          inputId = "button_showInfo", 
+                          icon = icon("info-circle"),
+                          label = "",
+                          style='padding:5px; font-size:250%; 
+                          height:60px; width:60px; 
+                          background-color: white; color: #555555; 
+                          border-color: darkgrey;'
+                        )
+                      )
+        ),
+        uiOutput(outputId = "myAppInfo")
     )
-    
   )
 )
              
@@ -101,9 +115,16 @@ server <- function(input,output){
   old.year <- places$year[places$place.name == place.clicked]
   img.or <- places$orientation[places$place.name == place.clicked]  # set orientation, "landscape" or "portrait"
   img.width <- ifelse(img.or == "landscape", "800", "650")
-  output$blabla <- renderText(paste(places$nice.name[places$place.name == place.clicked], places$year[places$place.name == place.clicked]))
-  
-  
+  str1 <- paste(places$nice.name[places$place.name == place.clicked], places$year[places$place.name == place.clicked], "- 2021")
+  str2 <- places$place.text[places$place.name == place.clicked]
+  output$blabla <- renderUI({
+    withTags({
+      div(id="infotext",
+          HTML(paste(str1, str2, sep = '<br/>'))
+      )
+    })
+  })
+
   output$myphoto <- renderUI( 
     withTags({
       div(id="photo",
@@ -122,9 +143,16 @@ server <- function(input,output){
     old.year <- places$year[places$place.name == place.clicked]
     img.or <- places$orientation[places$place.name == place.clicked]  # set orientation, "landscape" or "portrait"
     img.width <- ifelse(img.or == "landscape", "800", "650")
-    output$blabla <- renderText(paste(places$nice.name[places$place.name == place.clicked], places$year[places$place.name == place.clicked]))
     
-    
+    str1 <- paste(places$nice.name[places$place.name == place.clicked], places$year[places$place.name == place.clicked], "- 2021")
+    str2 <- places$place.text[places$place.name == place.clicked]
+    output$blabla <- renderUI({
+      withTags({
+        div(id="infotext",
+            HTML(paste(str1, str2, sep = '<br/>'))
+        )
+      })
+    })
     output$myphoto <- renderUI( 
       withTags({
         div(id="photo",
@@ -133,9 +161,56 @@ server <- function(input,output){
         )
       })
     )
-    
-    
   })
+  
+  
+  # showw app info when info button clicked
+  observeEvent(input$button_showInfo, {
+    output$myAppInfo <- renderUI({
+      absolutePanel(id = "appInfo",
+                    top = 10, left = 48, width = 800, fixed=TRUE,
+                    draggable = FALSE, height = "auto",
+                    actionButton(
+                      inputId = "button_hideInfo",
+                      icon = icon("times-circle"),
+                      label = "",
+                      style = 'padding:5px; font-size:250%;
+                        height:60px; width:60px;
+                        background-color: white; color: #555555;
+                        border-color: darkgrey;
+                        float:left;'
+                    ),
+                    h3(id = "appInfoText", "Aarhus Through Time"),
+                    h5(id = "appInfoText",
+                       "Click a marker on the map."),
+                    h5(id = "appInfoText",
+                       "Move the slider under the image"),
+                    h5(id = "appInfoText",
+                       "Enjoy your time travel"),
+                    
+                    )
+                           
+                       
+                  
+                          
+                    # h3("Aarhus Through Time", 
+                    #    style='margin-left: 70px; margin-top: 20px; 
+                    #    position: absolute;'),
+                    # h6("bla", style='margin-left: 70px; position: relative;')
+                      
+                   #h6("hej")
+                   # ),
+                   # fluidRow(h3("blablbalablab"))
+                      
+      
+    })
+  })
+  
+  # when hide button clicked, info panel is removed (repleced with empty ui)
+  observeEvent(input$button_hideInfo, {
+    output$myAppInfo <- renderUI({})
+  })
+  
   
 }
 
