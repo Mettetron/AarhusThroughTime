@@ -3,13 +3,6 @@ library(shiny)
 library(leaflet)  # fancy interactive map
 library(tidyverse)
 
-# # prepping custom icons
-# blueN <- makeIcon(
-#   iconUrl = "MM_blue_N.png",
-#   iconWidth = 30, iconHeight = 40,
-#   iconAnchorX = 15, iconAnchorY = 40,
-# )
-
 # Define unser interfase
 ui <- bootstrapPage(
   title = "Aarhus Through Time", 

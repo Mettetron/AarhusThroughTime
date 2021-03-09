@@ -16,7 +16,7 @@ div.outer {
   padding: 15px 15px 15px 15px;
   cursor: move;
   overflow: auto;
-  max-height: 95%;
+  max-height: 80%;
 }
 
 /* photos, old on bottom, new on top */
