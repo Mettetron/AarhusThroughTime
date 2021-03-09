@@ -16,7 +16,7 @@ ui <- bootstrapPage(
         
         # photobox
         absolutePanel(id = "photobox",
-                      top = 75, right = 75, width = 830, fixed=TRUE,
+                      top = 75, right = 75, width = 730, fixed=TRUE,
                       draggable = TRUE, height = "auto",
                       
                       # photo
@@ -116,7 +116,7 @@ server <- function(input,output){
     new.photo.file <- places$newpic[places$place.name == place.clicked()]
     old.year <- places$year[places$place.name == place.clicked()]
     img.or <- places$orientation[places$place.name == place.clicked()]  # set orientation, "landscape" or "portrait"
-    img.width <- ifelse(img.or == "landscape", "800", "650")
+    img.width <- ifelse(img.or == "landscape", "700", "500")
     withTags({
       div(id="photo",
           img(class="bottom", src=old.photo.file, width=img.width),
