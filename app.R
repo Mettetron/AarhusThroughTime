@@ -93,12 +93,12 @@ server <- function(input,output){
 
   # make background map with all the locations, which you can click to select photo
   output$mymap <- renderLeaflet({
-    leaflet() %>% 
+    leaflet(options = leafletOptions(zoomSnap=0.1)) %>% 
       addTiles(group = "OSM (default)") %>%
       addAwesomeMarkers(lng = places$longitude, lat = places$latitude, icon = icons,
                         popup = as.character(places$nice.name), label = as.character(places$nice.name),
                         layerId = places$place.name) %>%
-      setView(10.247834136581673, 56.15996939526574, zoom=14)
+      setView(10.247834136581673, 56.15996939526574, zoom=13.8)
   })
   
   # Choose initial location, but make the variable reactive 

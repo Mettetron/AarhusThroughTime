@@ -5,8 +5,8 @@ account: mettetron
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3657369
-bundleId: 4323094
+bundleId: 4323121
 url: https://mettetron.shinyapps.io/AarhusThroughTime/
-when: 1615327980.72121
+when: 1615328307.04369
 asMultiple: FALSE
 asStatic: FALSE
