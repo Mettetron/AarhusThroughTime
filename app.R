@@ -3,7 +3,12 @@ library(shiny)
 library(leaflet)  # fancy interactive map
 library(tidyverse)
 
-
+# # prepping custom icons
+# blueN <- makeIcon(
+#   iconUrl = "MM_blue_N.png",
+#   iconWidth = 30, iconHeight = 40,
+#   iconAnchorX = 15, iconAnchorY = 40,
+# )
 
 # Define unser interfase
 ui <- bootstrapPage(
@@ -78,14 +83,18 @@ server <- function(input,output){
 
   # save as txt from ecxel -> open with sublime text -> save with encoding UTF-8
   places <- read_tsv("ATT_data.txt")
-  # remove currently unwanted locations
-  places <- places[places$use == "yes", ]
+  # text unidentified
+  places$place.text[is.na(places$place.text)] <- " "
   
-  # make map icons with color depending on the existence of new photo
+  # make map icons with color and symbol depending on the existence of new photo and direction of view
+  dir.ang.df <- data.frame(dir=c(NA, "N", "NW", "W", "SW", "S", "SE", "E", "NE"),
+                           ang=c(0, 0, 315, 270, 225, 180, 135, 90, 45))
+  
   icons <- awesomeIcons(
-    icon = 'ios-close',
+    icon = ifelse(is.na(places$direction), 'times-circle', 'arrow-circle-up'),
+    iconRotate = dir.ang.df$ang[match(places$direction, dir.ang.df$dir)],
     iconColor = 'black',
-    library = 'ion',
+    library = 'fa',
     markerColor = ifelse(places$newpic == "placeholder.png", "red", "blue")
   )
 
@@ -99,9 +108,10 @@ server <- function(input,output){
       setView(10.247834136581673, 56.15996939526574, zoom=14)
   })
   
-  # Choose initial location, and set it up so that a click on a map marker changes the photos shown
+  # Choose initial location, but make the variable reactive 
   place.clicked  <- reactiveVal("Trojborgvej50")
   
+  # change the location variable when map marker is clicked
   observeEvent(input$mymap_marker_click, {
     newPlace <- input$mymap_marker_click$id     
     place.clicked(newPlace)             
@@ -126,9 +136,36 @@ server <- function(input,output){
   output$blabla <- renderUI({
     str1 <- paste(places$nice.name[places$place.name == place.clicked()], places$year[places$place.name == place.clicked()], "- 2021")
     str2 <- places$place.text[places$place.name == place.clicked()]
+    xtraimg <- places$xtraimg[places$place.name == place.clicked()]
+    xtraimgtxt <- places$xtraimgtxt[places$place.name == place.clicked()]
+    
+    
     withTags({
       div(id="infotext",
-          HTML(paste(str1, str2, sep = '<br/>'))
+          tags$script(src = "imageModal.js"),
+          HTML(paste(str1, str2, sep = '<br/>')),
+          if (!is.na(xtraimg)) {
+            HTML(paste('
+              <br/>
+              <!-- Trigger the Modal -->
+              <img id="myImg" src=', xtraimg, 'style="width:100%;max-width:30px">
+          
+              <!-- The Modal -->
+              <div id="myModal" class="modal">
+            
+                <!-- The Close Button -->
+                <span class="close">&times;</span>
+
+                <!-- Modal Content (The Image) -->
+                <img class="modal-content" id="img01">
+
+                <!-- Modal Caption (Image Text) -->
+                <div id="caption"><body>', xtraimgtxt, '</body></div>
+              </div>'))
+            
+          }
+              
+
       )
     })
   })
