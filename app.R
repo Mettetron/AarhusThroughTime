@@ -180,16 +180,18 @@ server <- function(input,output){
                         border-color: darkgrey;
                         float:left;'
                     ),
-                    h3(id = "appInfoText", 
-                       style = 'font-weight: bold;',
-                       "Aarhus Through Time"),
-                    h5(id = "appInfoText",
-                       "Click a marker on the map - Move the slider under the image - Enjoy your time travel!"),
-                    h6(id = "appInfoText",
-                       "Red map markers indicate locations that still do not 
-                       have a present-day photo. I'm working on it. 
-                       I'm also still working on adding some text for each location. See 'Huset' and 'Kollegier'.")
-                    )
+                    div(id="appInfoText",
+                    HTML("<body>
+                         <h2><b>Aarhus Through Time</b></h1>
+                         <p><h4>Click a marker on the map - Move the slider under the image - Enjoy your time travel!</h4></p>
+                         <p><h6>Red map markers indicate locations that still do not have a present-day photo. I'm working on it.<br> 
+                         I'm also still working on adding some text for each location. See 'Huset' and 'Kollegier'.</h6></p>
+                         <p><h6>This app is only possible because of the things others have shared online.<br>  
+                         I use postcards from <a href='https://www.bjorneri.dk/'>Bjørn Eriksen's great site</a>,
+                         and my research for texts always starts at <a href='https://aarhuswiki.dk'>AarhusWiki</a>.</h6></p>
+                         </body>"))
+                    
+      )
     })
   })
   
