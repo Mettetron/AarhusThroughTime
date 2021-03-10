@@ -102,7 +102,7 @@ server <- function(input,output){
   })
   
   # Choose initial location, but make the variable reactive 
-  place.clicked  <- reactiveVal("Trojborgvej50")
+  place.clicked  <- reactiveVal("Mejlgade46")
   
   # change the location variable when map marker is clicked
   observeEvent(input$mymap_marker_click, {
