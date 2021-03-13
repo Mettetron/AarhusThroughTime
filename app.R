@@ -40,9 +40,9 @@ ui <- bootstrapPage(
                       bottom = 20, right = 10, width = 100, fixed=TRUE,
                       draggable = FALSE, height = 46,
                       HTML('<div style="float: left;"><p><a href="https://github.com/Mettetron/AarhusThroughTime">
-                  <img src="GitHubLogo.png" width="30" height="30" title="GitHub repository"/></a></p></div>'),
+                            <img src="GitHubLogo.png" width="30" height="30" title="GitHub repository"/></a></p></div>'),
                       HTML('<div style="position: relative; margin-left:40px;"><p><a href="https://www.bjorneri.dk">
-                  <img src="postcardLogo.png" height="30" title="Source of postcards"/></a></p></div>')
+                            <img src="postcardLogo.png" height="30" title="Source of postcards"/></a></p></div>')
                       ),
            
                         
@@ -93,7 +93,7 @@ server <- function(input,output){
 
   # make background map with all the locations, which you can click to select photo
   output$mymap <- renderLeaflet({
-    leaflet(options = leafletOptions(zoomSnap=0.1)) %>% 
+    leaflet(options = leafletOptions(zoomSnap=0.2)) %>% 
       addTiles(group = "OSM (default)") %>%
       addAwesomeMarkers(lng = places$longitude, lat = places$latitude, icon = icons,
                         popup = as.character(places$nice.name), label = as.character(places$nice.name),
@@ -136,10 +136,12 @@ server <- function(input,output){
     withTags({
       div(id="infotext",
           tags$script(src = "imageModal.js"),
-          HTML(paste(str1, str2, sep = '<br/>')),
+          HTML(paste0("<body>
+                      <h4><b>", str1, "</b></h4>
+                      <p>", str2, "</p>
+                      </body>")),
           if (!is.na(xtraimg)) {
             HTML(paste('
-              <br/>
               <!-- Trigger the Modal -->
               <img id="myImg" src=', xtraimg, 'style="width:100%;max-width:30px">
           
@@ -154,7 +156,8 @@ server <- function(input,output){
 
                 <!-- Modal Caption (Image Text) -->
                 <div id="caption"><body>', xtraimgtxt, '</body></div>
-              </div>'))
+              </div>
+              <br>'))
             
           }
               

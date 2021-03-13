@@ -34,6 +34,8 @@ div.outer {
   color: black;
   font-family: helvetica;
   font-size: 100%;
+  text-align: justify;
+}
 }
 
 #links {
@@ -59,7 +61,7 @@ div.outer {
 #contrastSlider {
   position: relative;
   margin-top: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   margin-right: auto;
   margin-left: auto;
   width: 100%;
