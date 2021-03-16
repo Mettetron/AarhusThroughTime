@@ -1,7 +1,7 @@
 # load packages
-library(shiny)  
-library(leaflet)  # fancy interactive map
-library(tidyverse)
+suppressMessages(library(shiny))
+suppressMessages(library(leaflet))  # fancy interactive map
+suppressMessages(library(tidyverse))
 
 # Define unser interfase
 ui <- bootstrapPage(
@@ -17,7 +17,7 @@ ui <- bootstrapPage(
         # photobox
         absolutePanel(id = "photobox",
                       top = 75, right = 75, width = 730, fixed=TRUE,
-                      draggable = TRUE, height = "auto",
+                      draggable = FALSE, height = "auto",
                       
                       # photo
                       uiOutput("myphoto"),
@@ -75,7 +75,7 @@ ui <- bootstrapPage(
 server <- function(input,output){
 
   # save as txt from ecxel -> open with sublime text -> save with encoding UTF-8
-  places <- read_tsv("ATT_data.txt")
+  places <- read_tsv("ATT_data.txt", col_types = cols())
   # text unidentified
   places$place.text[is.na(places$place.text)] <- " "
   
@@ -106,7 +106,8 @@ server <- function(input,output){
   
   # change the location variable when map marker is clicked
   observeEvent(input$mymap_marker_click, {
-    newPlace <- input$mymap_marker_click$id     
+    newPlace <- input$mymap_marker_click$id
+    print(paste(newPlace, "clicked"))
     place.clicked(newPlace)             
   })
   
@@ -127,8 +128,8 @@ server <- function(input,output){
   
   # make text below photo
   output$blabla <- renderUI({
-    str1 <- paste(places$nice.name[places$place.name == place.clicked()], places$year[places$place.name == place.clicked()], "- 2021")
-    str2 <- places$place.text[places$place.name == place.clicked()]
+    infotext.headline <- paste(places$nice.name[places$place.name == place.clicked()], places$year[places$place.name == place.clicked()], "- 2021")
+    infotext.bread <- places$place.text[places$place.name == place.clicked()]
     xtraimg <- places$xtraimg[places$place.name == place.clicked()]
     xtraimgtxt <- places$xtraimgtxt[places$place.name == place.clicked()]
     
@@ -137,17 +138,17 @@ server <- function(input,output){
       div(id="infotext",
           tags$script(src = "imageModal.js"),
           HTML(paste0("<body>
-                      <h4><b>", str1, "</b></h4>
-                      <p>", str2, "</p>
+                      <h4><b>", infotext.headline, "</b></h4>
+                      <p>", infotext.bread, "</p>
                       </body>")),
           if (!is.na(xtraimg)) {
             HTML(paste('
               <!-- Trigger the Modal -->
-              <img id="myImg" src=', xtraimg, 'style="width:100%;max-width:30px">
-          
+              <img id="myImg" src=', xtraimg, '">
+
               <!-- The Modal -->
               <div id="myModal" class="modal">
-            
+
                 <!-- The Close Button -->
                 <span class="close">&times;</span>
 
@@ -158,10 +159,7 @@ server <- function(input,output){
                 <div id="caption"><body>', xtraimgtxt, '</body></div>
               </div>
               <br>'))
-            
           }
-              
-
       )
     })
   })
@@ -169,6 +167,7 @@ server <- function(input,output){
   
   # show app info when info button clicked
   observeEvent(input$button_showInfo, {
+    print("Info button clicked")
     output$myAppInfo <- renderUI({
       absolutePanel(id = "appInfo",
                     top = 10, left = 48, width = 800, fixed=TRUE,
