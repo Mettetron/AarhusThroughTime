@@ -97,11 +97,10 @@ div.outer {
   background: #4CAF50;
   cursor: hand;
 }
-
- /* Style the Image Used to Trigger the Modal */
-#myImg {
-  width:100%; 
-  max-width:30px;
+/* Style the Image Used to Trigger the Modal */
+.buttonImg {
+  max-height: 50px;
+  float: right;
   display: block;
   margin-left: auto;
   margin-right: 30px;
@@ -110,7 +109,7 @@ div.outer {
   transition: 0.3s;
 }
 
-#myImg:hover {opacity: 0.7;}
+.buttonImg:hover { opacity: 0.7; }
 
 /* The Modal (background) */
 .modal {
@@ -124,8 +123,8 @@ div.outer {
   width: 80%;
   height: 80%;
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
 }
 
 /* Modal Content (Image) */
@@ -137,7 +136,7 @@ div.outer {
 }
 
 /* Caption of Modal Image (Image Text) - Same Width as the Image */
-#caption {
+.modalcaption {
   margin: auto;
   display: block;
   width: 80%;
@@ -149,14 +148,14 @@ div.outer {
 }
 
 /* Add Animation - Zoom in the Modal */
-.modal-content, #caption {
+.modal-content, .caption {
   animation-name: zoom;
   animation-duration: 0.6s;
 }
 
 @keyframes zoom {
-  from {transform:scale(0)}
-  to {transform:scale(1)}
+  from { transform: scale(0); }
+  to { transform: scale(1); }
 }
 
 /* The Close Button */

@@ -132,33 +132,43 @@ server <- function(input,output){
     infotext.bread <- places$place.text[places$place.name == place.clicked()]
     xtraimg <- places$xtraimg[places$place.name == place.clicked()]
     xtraimgtxt <- places$xtraimgtxt[places$place.name == place.clicked()]
+    xtraimg2 <- places$xtraimg2[places$place.name == place.clicked()]
+    xtraimgtxt2 <- places$xtraimgtxt2[places$place.name == place.clicked()]
     
     
     withTags({
       div(id="infotext",
-          tags$script(src = "imageModal.js"),
+          tags$script(src = "imageModal2.js"),
           HTML(paste0("<body>
                       <h4><b>", infotext.headline, "</b></h4>
                       <p>", infotext.bread, "</p>
                       </body>")),
           if (!is.na(xtraimg)) {
             HTML(paste('
-              <!-- Trigger the Modal -->
-              <img id="myImg" src=', xtraimg, '">
+            <!-- Trigger the Modal -->
+              <img id="myImg1" class="buttonImg" src=', xtraimg, 'href="#myModal1">
 
               <!-- The Modal -->
-              <div id="myModal" class="modal">
+              <div id="myModal1" class="modal">
 
                 <!-- The Close Button -->
                 <span class="close">&times;</span>
 
                 <!-- Modal Content (The Image) -->
-                <img class="modal-content" id="img01">
+                <img class="modal-content" src=', xtraimg, '>
 
                 <!-- Modal Caption (Image Text) -->
-                <div id="caption"><body>', xtraimgtxt, '</body></div>
-              </div>
-              <br>'))
+                <div id="caption1" class="modalcaption"><body>', xtraimgtxt, '</body></div>
+              </div>'))
+          },
+          if (!is.na(xtraimg2)) {
+            HTML(paste('
+              <img id="myImg2" class="buttonImg" src=', xtraimg2, ' href="#myModal2">
+              <div id="myModal2" class="modal">
+                <span class="close">&times;</span>
+                <img class="modal-content" src=', xtraimg2, '>
+                <div id="caption2" class="modalcaption"><body>', xtraimgtxt2, '</body></div>
+              </div>'))
           }
       )
     })
