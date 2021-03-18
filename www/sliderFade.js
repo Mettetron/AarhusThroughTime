@@ -3,3 +3,8 @@ $(document).ready(function() {
     $('#photo img.top').css('opacity', $(this).val());
 });
 });	
+
+
+
+
+

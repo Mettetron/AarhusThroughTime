@@ -5,6 +5,10 @@ suppressMessages(library(tidyverse))
 
 # Define unser interfase
 ui <- bootstrapPage(
+  
+  # fixed page size - for mobile viewing
+  HTML('<meta name="viewport" content="width=1024">'),
+  
   title = "Aarhus Through Time", 
   fluidRow(
     div(class="outer",
@@ -106,6 +110,7 @@ server <- function(input,output){
   
   # change the location variable when map marker is clicked
   observeEvent(input$mymap_marker_click, {
+    sliderval <- 0
     newPlace <- input$mymap_marker_click$id
     print(paste(newPlace, "clicked"))
     place.clicked(newPlace)             
@@ -113,22 +118,24 @@ server <- function(input,output){
   
   # make photos (overlayed)
   output$myphoto <- renderUI({
+    
     old.photo.file <- places$oldpic[places$place.name == place.clicked()]
     new.photo.file <- places$newpic[places$place.name == place.clicked()]
-    old.year <- places$year[places$place.name == place.clicked()]
-    img.or <- places$orientation[places$place.name == place.clicked()]  # set orientation, "landscape" or "portrait"
-    img.width <- ifelse(img.or == "landscape", "700", "500")
+    
     withTags({
       div(id="photo",
-          img(class="bottom", src=old.photo.file, width=img.width),
-          img(class="top", src=new.photo.file, width=img.width)
+          img(class="bottom", src=old.photo.file),
+          img(class="top", src=new.photo.file)
       )
     })
   })
   
+  
   # make text below photo
   output$blabla <- renderUI({
-    infotext.headline <- paste(places$nice.name[places$place.name == place.clicked()], places$year[places$place.name == place.clicked()], "- 2021")
+    infotext.headline <- paste(places$nice.name[places$place.name == place.clicked()], 
+                               places$year[places$place.name == place.clicked()], "-",
+                               places$newyear[places$place.name == place.clicked()])
     infotext.bread <- places$place.text[places$place.name == place.clicked()]
     xtraimg <- places$xtraimg[places$place.name == place.clicked()]
     xtraimgtxt <- places$xtraimgtxt[places$place.name == place.clicked()]
@@ -197,17 +204,18 @@ server <- function(input,output){
                          <h2><b>Aarhus Through Time</b></h1>
                          <p><h4>Click a marker on the map - Move the slider under the image - Enjoy your time travel!</h4></p>
                          <p><h6>Red map markers indicate locations that still do not have a present-day photo. I'm working on it.<br> 
-                         I'm also still working on adding some text for each location. See 'Huset' and 'Kollegier'.</h6></p>
+                         I'm also still working on adding some text for each location. See 'Huset' and 'Park Kollegierne'.</h6></p>
                          <p><h6>This app is only possible because of the things others have shared online.<br>  
                          I use postcards from <a href='https://www.bjorneri.dk/'>Bjørn Eriksen's great site</a>,
-                         and my research for texts always starts at <a href='https://aarhuswiki.dk'>AarhusWiki</a>.</h6></p>
+                         and in my research for texts and additional images i have used <a href='https://aarhuswiki.dk'>AarhusWiki</a>,
+                         <a href='https://www.aarhusbilleder.dk'>Aarhus Billeder</a>, and <a href='https://historiskatlas.dk/'>Historisk Atlas</a>.</h6></p>
                          </body>"))
                     
       )
     })
   })
   
-  # when X button clicked, info panel is removed (repleced with empty ui)
+  # when X button clicked, info panel is removed (replaced with empty ui)
   observeEvent(input$button_hideInfo, {
     output$myAppInfo <- renderUI({})
   })
