@@ -141,6 +141,8 @@ server <- function(input,output){
     xtraimgtxt <- places$xtraimgtxt[places$place.name == place.clicked()]
     xtraimg2 <- places$xtraimg2[places$place.name == place.clicked()]
     xtraimgtxt2 <- places$xtraimgtxt2[places$place.name == place.clicked()]
+    xtraimg3 <- places$xtraimg3[places$place.name == place.clicked()]
+    xtraimgtxt3 <- places$xtraimgtxt3[places$place.name == place.clicked()]
     
     
     withTags({
@@ -175,6 +177,15 @@ server <- function(input,output){
                 <span class="close">&times;</span>
                 <img class="modal-content" src=', xtraimg2, '>
                 <div id="caption2" class="modalcaption"><body>', xtraimgtxt2, '</body></div>
+              </div>'))
+          },
+          if (!is.na(xtraimg3)) {
+            HTML(paste('
+              <img id="myImg3" class="buttonImg" src=', xtraimg3, ' href="#myModal3">
+              <div id="myModal3" class="modal">
+                <span class="close">&times;</span>
+                <img class="modal-content" src=', xtraimg3, '>
+                <div id="caption3" class="modalcaption"><body>', xtraimgtxt3, '</body></div>
               </div>'))
           }
       )
