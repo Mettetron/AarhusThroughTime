@@ -21,3 +21,9 @@ for (var i = 0; i < spans.length; i++) {
     }
  }
 }
+
+window.onclick = function(event) {
+       if (event.target.class != "modal-content") {
+          $("#modal").hide();
+       }
+    }
