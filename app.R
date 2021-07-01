@@ -80,6 +80,8 @@ server <- function(input,output){
 
   # save as txt from ecxel -> open with sublime text -> save with encoding UTF-8
   places <- read_tsv("ATT_data.txt", col_types = cols())
+  # only keep interesting places
+  places <- places[places$interest.rating > 0, ]
   # text unidentified
   places$place.text[is.na(places$place.text)] <- " "
   

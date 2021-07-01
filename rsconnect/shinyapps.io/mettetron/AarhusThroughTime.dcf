@@ -1,0 +1,12 @@
+name: AarhusThroughTime
+title: AarhusThroughTime
+username:
+account: mettetron
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3657369
+bundleId: 4367795
+url: https://mettetron.shinyapps.io/AarhusThroughTime/
+when: 1616149570.52433
+asMultiple: FALSE
+asStatic: FALSE
